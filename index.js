@@ -7,6 +7,7 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const sodium = require('sodium').api
 
+const localSodium = require('./lib/local-sodium')
 const development = require('./knexfile').development
 const knex = require('knex')(development)
 
@@ -24,27 +25,9 @@ app.use(flash())
 app.use(passport.initialize())
 app.use(passport.session())
 
-const strategy = new LocalStrategy(require('./lib/sodium-strategy'))
-passport.use(strategy)
-
-passport.serializeUser((user, done) => {
-  done(null, user.id)
-})
-
-passport.deserializeUser((id, done) => {
-  knex('users')
-    .select('id', 'username')
-    .where('id', id)
-    .then(users => {
-      if (users.length === 0) {
-        return done(null, false)
-      }
-      done(null, users[0])
-    })
-    .catch(err => {
-      done(err, false)
-    })
-})
+passport.use(new LocalStrategy(localSodium.strategy))
+passport.serializeUser(localSodium.serialize)
+passport.deserializeUser(localSodium.deserialize)
 
 app.get('/login', (req, res) => {
   res.send(`<p>${req.flash('error')}</p><form action="login" method="POST"><input name="username"><input name="password"><input type="submit" value="Log in"></form>`)
