@@ -10,7 +10,7 @@ const router = express.Router()
 module.exports = router
 
 router.get('/login', (req, res) => {
-  res.send(`<p>${req.flash('error')}</p><form action="login" method="POST"><input name="username"><input name="password"><input type="submit" value="Log in"></form>`)
+  res.render('login', { flash: req.flash('error') })
 })
 
 router.post('/login',
@@ -32,7 +32,7 @@ router.get('/',
   })
 
 router.get('/register', (req, res) => {
-  res.send(`<p>${req.flash('error')}</p><form action="register" method="POST"><input name="username"><input name="password"><input type="submit" value="Register"></form>`)
+  res.render('register', { flash: req.flash('error') })
 })
 
 router.post('/register', (req, res) => {
