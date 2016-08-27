@@ -3,11 +3,12 @@ const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn
 const express = require('express')
 const expressSession = require('express-session')
 const flash = require('connect-flash')
-const development = require('./knexfile').development
-const knex = require('knex')(development)
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const sodium = require('sodium').api
+
+const development = require('./knexfile').development
+const knex = require('knex')(development)
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -16,39 +17,14 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // from a .env file or come up with another way of generating it.
 app.use(expressSession({
   resave: false,
-  secret: 'z11k|L1Baa442N0|[68]FzjlED2DY0',
+  secret: 'CHANGE THIS IN PRODUCTION!',
   saveUninitialized: false
 }))
 app.use(flash())
 app.use(passport.initialize())
 app.use(passport.session())
 
-function sodiumStrategy (username, password, done) {
-  knex('users')
-    .select()
-    .where('username', username)
-    .then(users => {
-      if (users.length === 0) {
-        return done(null, false, { message: 'Unrecognised user.' })
-      }
-
-      const user = users[0]
-      const dbPassword = new Buffer(user.password)
-      const submittedPassword = new Buffer(password)
-      if (!sodium.crypto_pwhash_str_verify(dbPassword, submittedPassword)) {
-        return done(null, false, { message: 'Incorrect password.' })
-      }
-      done(null, {
-        id: user.id,
-        username: user.username
-      })
-    })
-    .catch(err => {
-      done(err, false, { message: 'Something bad happened.' })
-    })
-}
-
-const strategy = new LocalStrategy(sodiumStrategy)
+const strategy = new LocalStrategy(require('./lib/sodium-strategy'))
 passport.use(strategy)
 
 passport.serializeUser((user, done) => {
@@ -80,6 +56,11 @@ app.post('/login',
     failureRedirect: '/login',
     failureFlash: true
   }))
+
+app.get('/logout', (req, res) => {
+  req.logout()
+  res.redirect('/login')
+})
 
 app.get('/',
   ensureLoggedIn(),
@@ -124,8 +105,7 @@ app.post('/register', (req, res) => {
           res.redirect('/login')
         })
     })
-    .catch(err => {
-      console.error(err.message)
+    .catch(() => {
       req.flash('error', "Couldn't add user.")
       res.redirect('/register')
     })
