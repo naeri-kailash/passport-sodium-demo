@@ -25,7 +25,7 @@ router.get('/logout', (req, res) => {
 router.get('/',
   ensureLoggedIn(),
   (req, res) => {
-    res.send('<p><a href="/logout">Logout</a></p><img src="http://pawn.hss.cmu.edu/~67103/images/wombats/wombat4.jpg">')
+    res.render('index')
   })
 
 router.get('/register', (req, res) => {
