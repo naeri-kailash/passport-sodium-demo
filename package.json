@@ -1,14 +1,14 @@
 {
-  "name": "passport-demo",
+  "name": "passport-sodium-local",
   "version": "0.1.0",
-  "description": "Passport demonstration",
+  "description": "Express/Passport demo using libsodium.",
   "main": "index.js",
   "scripts": {
     "knex": "knex",
     "start": "node-inspector & nodemon --debug",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "EDA",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.2",
