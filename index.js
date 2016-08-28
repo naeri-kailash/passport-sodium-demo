@@ -10,6 +10,10 @@ const LocalStrategy = require('passport-local')
 const localSodium = require('./lib/local-sodium')
 const indexRoutes = require('./routes')
 
+process.on('unhandledRejection', (error, promise) => {
+  console.error('UNHANDLED REJECTION', error.stack)
+})
+
 const app = express()
 app.engine('hbs', hbs())
 app.set('view engine', 'hbs')
