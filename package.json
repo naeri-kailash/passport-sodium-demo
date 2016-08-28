@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "knex": "knex",
+    "postinstall": "knex migrate:latest",
     "start": "node-inspector & nodemon --debug",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
