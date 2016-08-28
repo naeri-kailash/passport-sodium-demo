@@ -41,10 +41,9 @@ router.post('/register',
           return res.redirect('/register')
         }
 
+        // req.login() can be used to automatically log the user in after registering
         users.create(req.body.username, req.body.password)
-          .then(() => {
-            res.redirect('/login')
-          })
+          .then(() => res.redirect('/login'))
           .catch(() => next())
       })
       .catch(() => next())
