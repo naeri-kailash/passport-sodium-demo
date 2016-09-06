@@ -6,9 +6,11 @@ const path = require('path')
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
 
-const localSodium = require('./lib/local-sodium')
-const indexRoutes = require('./routes')
+const strategy = require('./lib/local-strategy')
+const users = require('./lib/users')
+
 const apiRoutes = require('./routes/api')
+const indexRoutes = require('./routes')
 
 process.on('unhandledRejection', (error, promise) => {
   console.error('UNHANDLED REJECTION', error.stack)
@@ -32,9 +34,9 @@ app.use(passport.session())
 app.use('/', indexRoutes)
 app.use('/api/', apiRoutes)
 
-passport.use(new LocalStrategy(localSodium.strategy))
-passport.serializeUser(localSodium.serialize)
-passport.deserializeUser(localSodium.deserialize)
+passport.use(new LocalStrategy(strategy))
+passport.serializeUser(users.serialize)
+passport.deserializeUser(users.deserialize)
 
 app.listen(3000, () => {
   console.log('Listening on 3000')

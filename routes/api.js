@@ -1,8 +1,8 @@
 const bodyParser = require('body-parser')
 const express = require('express')
 const jwt = require('jsonwebtoken')
-const sodium = require('sodium').api
 
+const crypto = require('../lib/crypto')
 const users = require('../lib/users')
 
 const router = express.Router()
@@ -10,12 +10,6 @@ module.exports = router
 router.use(bodyParser.json())
 
 const secret = 'SECRET! SO, SO, SECRET!'
-
-function verifyUser (user, password) {
-  const hash = new Buffer(user.hash, 'utf8')
-  const passwordBuffer = new Buffer(password, 'utf8')
-  return sodium.crypto_pwhash_str_verify(hash, passwordBuffer)
-}
 
 router.post('/authenticate', (req, res) => {
   users.getByName(req.body.username)
@@ -25,7 +19,7 @@ router.post('/authenticate', (req, res) => {
       }
 
       const user = users[0]
-      if (!verifyUser(user, req.body.password)) {
+      if (!crypto.verifyUser(user, req.body.password)) {
         return res.json({ success: false, message: 'Authentication failed. Wrong password.' })
       }
 
