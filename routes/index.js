@@ -1,3 +1,4 @@
+const bodyParser = require('body-parser')
 const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn
 const express = require('express')
 const passport = require('passport')
@@ -5,6 +6,7 @@ const users = require('../lib/users')
 
 const router = express.Router()
 module.exports = router
+router.use(bodyParser.urlencoded({ extended: false }))
 
 router.get('/login', (req, res) => {
   res.render('login', { flash: req.flash('error') })
