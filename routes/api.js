@@ -1,5 +1,6 @@
 const bodyParser = require('body-parser')
 const express = require('express')
+const authenticate = require('express-jwt')
 const jwt = require('jsonwebtoken')
 
 const crypto = require('../lib/crypto')
@@ -9,6 +10,8 @@ const router = express.Router()
 module.exports = router
 router.use(bodyParser.json())
 
+// Just as we wouldn't put the session secret in Git, a real server would never
+// store the JWT signing secret here!
 const secret = 'SECRET! SO, SO, SECRET!'
 
 router.post('/authenticate', (req, res) => {
@@ -35,20 +38,18 @@ router.post('/authenticate', (req, res) => {
     })
 })
 
-router.use((req, res, next) => {
-  const token = req.headers['x-access-token']
-
-  if (token) {
-    return jwt.verify(token, secret, (err, decoded) => {
-      if (err) {
-        return res.status(403).send({ success: false, message: 'Failed to authenticate token.' })
-      }
-      req.decoded = decoded
-      return next()
-    })
+router.use(
+  authenticate({ secret: secret }),
+  (err, req, res, next) => {
+    if (err) {
+      return res.status(403).json({
+        message: 'Access to this resource was denied.',
+        error: err.message
+      })
+    }
+    next()
   }
-  res.status(403).send({ success: false, message: 'Access to this route requires a valid token.' })
-})
+)
 
 router.get('/something', (req, res) => {
   res.json('Yup.')
