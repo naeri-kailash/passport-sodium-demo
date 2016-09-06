@@ -16,12 +16,12 @@ const secret = 'SECRET! SO, SO, SECRET!'
 
 router.post('/authenticate', (req, res) => {
   users.getByName(req.body.username)
-    .then(users => {
-      if (users.length === 0) {
+    .then(userList => {
+      if (userList.length === 0) {
         return res.json({ success: false, message: 'Authentication failed. User not found.' })
       }
 
-      const user = users[0]
+      const user = userList[0]
       if (!crypto.verifyUser(user, req.body.password)) {
         return res.json({ success: false, message: 'Authentication failed. Wrong password.' })
       }
@@ -31,8 +31,7 @@ router.post('/authenticate', (req, res) => {
       })
 
       res.json({
-        success: true,
-        message: 'Wombats are awesome.',
+        message: 'Authentication successful.',
         token: token
       })
     })
