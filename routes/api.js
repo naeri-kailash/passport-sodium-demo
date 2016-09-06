@@ -55,11 +55,17 @@ function handleAuthError (err, req, res, next) {
   next()
 }
 
+// express-jwt middleware lets us use a function as the secret, which we can
+// use to grab it out of the app configuration settings
+function getSecret (req, payload, done) {
+  done(null, req.app.get('AUTH_SECRET'))
+}
+
 // This route will set the req.user object if it exists, but is still public
 router.get('/open',
   authenticate({
     credentialsRequired: false,
-    secret: (req, payload, done) => done(null, req.app.get('AUTH_SECRET'))
+    secret: getSecret
   }),
   (req, res) => {
     const json = { message: 'This route is public.' }
@@ -72,10 +78,8 @@ router.get('/open',
 
 // Protect all routes beneath this point
 router.use(
-  // express-jwt middleware lets us use a function as the secret, which we can
-  // use to grab it out of the app configuration settings
   authenticate({
-    secret: (req, payload, done) => done(null, req.app.get('AUTH_SECRET'))
+    secret: getSecret
   }),
   handleAuthError
 )
