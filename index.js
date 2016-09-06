@@ -28,6 +28,11 @@ app.use(expressSession({
   secret: 'CHANGE THIS IN PRODUCTION!',
   saveUninitialized: false
 }))
+
+// Just as we wouldn't put the session secret in Git, a real server would never
+// store the JWT signing secret here!
+app.set('AUTH_SECRET', 'SECRET! SO, SO, SECRET!')
+
 app.use(flash())
 app.use(passport.initialize())
 app.use(passport.session())

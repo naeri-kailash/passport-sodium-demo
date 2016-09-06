@@ -10,10 +10,6 @@ const router = express.Router()
 module.exports = router
 router.use(bodyParser.json())
 
-// Just as we wouldn't put the session secret in Git, a real server would never
-// store the JWT signing secret here!
-const secret = 'SECRET! SO, SO, SECRET!'
-
 router.post('/authenticate', (req, res) => {
   users.getByName(req.body.username)
     .then(userList => {
@@ -26,7 +22,7 @@ router.post('/authenticate', (req, res) => {
         return res.json({ success: false, message: 'Authentication failed. Wrong password.' })
       }
 
-      const token = jwt.sign({ id: user.id }, secret, {
+      const token = jwt.sign({ id: user.id }, req.app.get('AUTH_SECRET'), {
         expiresIn: 60 * 60 * 24
       })
 
@@ -38,7 +34,9 @@ router.post('/authenticate', (req, res) => {
 })
 
 router.use(
-  authenticate({ secret: secret }),
+  authenticate({
+    secret: req => req.app.get('AUTH_SECRET')
+  }),
   (err, req, res, next) => {
     if (err) {
       return res.status(403).json({
