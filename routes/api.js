@@ -10,16 +10,22 @@ const router = express.Router()
 module.exports = router
 router.use(bodyParser.json())
 
+// This route is public. It accepts a POST request with JSON body:
+// {
+//   "username": "foo",
+//   "password": "bar"
+// }
+// This should obviously be sent via HTTPS.
 router.post('/authenticate', (req, res) => {
   users.getByName(req.body.username)
     .then(userList => {
       if (userList.length === 0) {
-        return res.json({ success: false, message: 'Authentication failed. User not found.' })
+        return res.json({ message: 'Authentication failed. User not found.' })
       }
 
       const user = userList[0]
       if (!crypto.verifyUser(user, req.body.password)) {
-        return res.json({ success: false, message: 'Authentication failed. Wrong password.' })
+        return res.json({ message: 'Authentication failed. Wrong password.' })
       }
 
       const token = jwt.sign({ id: user.id }, req.app.get('AUTH_SECRET'), {
@@ -31,8 +37,15 @@ router.post('/authenticate', (req, res) => {
         token: token
       })
     })
+    .catch(err => {
+      res.status(500).json({
+        message: 'Authentication failed due to a server error.',
+        error: err.message
+      })
+    })
 })
 
+// Protect all routes beneath this point
 router.use(
   authenticate({
     secret: req => req.app.get('AUTH_SECRET')
@@ -48,6 +61,7 @@ router.use(
   }
 )
 
+// These routes are protected
 router.get('/something', (req, res) => {
   res.json('Yup.')
 })
