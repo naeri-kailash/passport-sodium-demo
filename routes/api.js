@@ -45,23 +45,42 @@ router.post('/authenticate', (req, res) => {
     })
 })
 
-// Protect all routes beneath this point
-router.use(
+function handleAuthError (err, req, res, next) {
+  if (err) {
+    return res.status(403).json({
+      message: 'Access to this resource was denied.',
+      error: err.message
+    })
+  }
+  next()
+}
+
+// This route will set the req.user object if it exists, but is still public
+router.get('/open',
   authenticate({
-    secret: req => req.app.get('AUTH_SECRET')
+    credentialsRequired: false,
+    secret: (req, payload, done) => done(null, req.app.get('AUTH_SECRET'))
   }),
-  (err, req, res, next) => {
-    if (err) {
-      return res.status(403).json({
-        message: 'Access to this resource was denied.',
-        error: err.message
-      })
+  (req, res) => {
+    const json = { message: 'This route is public.' }
+    if (req.user) {
+      json.user = `Your user ID is: ${req.user.id}`
     }
-    next()
+    res.json(json)
   }
 )
 
+// Protect all routes beneath this point
+router.use(
+  // express-jwt middleware lets us use a function as the secret, which we can
+  // use to grab it out of the app configuration settings
+  authenticate({
+    secret: (req, payload, done) => done(null, req.app.get('AUTH_SECRET'))
+  }),
+  handleAuthError
+)
+
 // These routes are protected
-router.get('/something', (req, res) => {
-  res.json('Yup.')
+router.get('/closed', (req, res) => {
+  res.json({ message: `Yup, you seem to be user ${req.user.id}.` })
 })
