@@ -55,8 +55,8 @@ function handleAuthError (err, req, res, next) {
   next()
 }
 
-// express-jwt middleware lets us use a function as the secret, which we can
-// use to grab it out of the app configuration settings
+// express-jwt middleware lets us use a function as the secret,
+// so we can grab it out of app settings
 function getSecret (req, payload, done) {
   done(null, req.app.get('AUTH_SECRET'))
 }
