@@ -1,45 +1,16 @@
 const bodyParser = require('body-parser')
 const express = require('express')
-const authenticate = require('express-jwt')
-const jwt = require('jsonwebtoken')
-const passport = require('passport')
+const verifyJwt = require('express-jwt')
+
+const auth = require('../lib/auth.js')
 
 const router = express.Router()
 module.exports = router
 router.use(bodyParser.json())
 
-// This route is public. It accepts a POST request with JSON body:
-// {
-//   "username": "foo",
-//   "password": "bar"
-// }
-// This should obviously be sent via HTTPS.
-router.post('/authenticate', (req, res, next) => {
-  passport.authenticate('local', (err, user, info) => {
-    if (err) {
-      return res.status(500).json({
-        message: 'Authentication failed due to a server error.',
-        error: err.message
-      })
-    }
-
-    if (!req.user) {
-      return res.json({
-        message: 'Authentication failed.',
-        info: info
-      })
-    }
-
-    const token = jwt.sign({ id: user.id }, req.app.get('AUTH_SECRET'), {
-      expiresIn: 60 * 60 * 24
-    })
-
-    res.json({
-      message: 'Authentication successful.',
-      token: token
-    })
-  })(req, res)
-})
+// This is the only API route that uses local strategy, to check if we can
+// issue a JWT in response to requests.
+router.post('/authenticate', auth.issueJwt)
 
 function handleAuthError (err, req, res, next) {
   if (err) {
@@ -59,7 +30,7 @@ function getSecret (req, payload, done) {
 
 // This route will set the req.user object if it exists, but is still public
 router.get('/open',
-  authenticate({
+  verifyJwt({
     credentialsRequired: false,
     secret: getSecret
   }),
@@ -74,7 +45,7 @@ router.get('/open',
 
 // Protect all routes beneath this point
 router.use(
-  authenticate({
+  verifyJwt({
     secret: getSecret
   }),
   handleAuthError

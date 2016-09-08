@@ -17,7 +17,8 @@ router.post('/login',
     successRedirect: '/',
     failureRedirect: '/login',
     failureFlash: true
-  }))
+  })
+)
 
 router.get('/logout', (req, res) => {
   req.logout()
@@ -28,7 +29,8 @@ router.get('/',
   ensureLoggedIn(),
   (req, res) => {
     res.render('index')
-  })
+  }
+)
 
 router.get('/register', (req, res) => {
   res.render('register', { flash: req.flash('error') })

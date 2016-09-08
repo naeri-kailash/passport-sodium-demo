@@ -6,7 +6,7 @@ const path = require('path')
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
 
-const strategy = require('./lib/local-strategy')
+const auth = require('./lib/auth')
 const users = require('./lib/users')
 
 const apiRoutes = require('./routes/api')
@@ -39,7 +39,7 @@ app.use(passport.session())
 app.use('/', indexRoutes)
 app.use('/api/', apiRoutes)
 
-passport.use(new LocalStrategy(strategy))
+passport.use(new LocalStrategy(auth.verify))
 passport.serializeUser(users.serialize)
 passport.deserializeUser(users.deserialize)
 
