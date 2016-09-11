@@ -10,14 +10,7 @@ npm i
 npm start
 ```
 
-
-## Mac / OSX
-
-If you don't already have them, you may need to install `libtool`, `autoconf`, and `automake` in order to build libsodium:
-
-```shell
-brew install libtool autoconf automake
-```
+Password hashing modules often have a _native_ component: they're written in lower-level languages like C or C++ with a JavaScript _wrapper_. This means they can be trickier to install on some platforms. There are some instructions for how to obtain the necessary tools to build native modules [here](https://github.com/dev-academy-programme/orientation/tree/master/3-installation/node.md).
 
 
 ## Things to think about

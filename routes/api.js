@@ -12,16 +12,6 @@ router.use(bodyParser.json())
 // issue a JWT in response to requests.
 router.post('/authenticate', auth.issueJwt)
 
-function handleAuthError (err, req, res, next) {
-  if (err) {
-    return res.status(403).json({
-      message: 'Access to this resource was denied.',
-      error: err.message
-    })
-  }
-  next()
-}
-
 // express-jwt middleware lets us use a function as the secret,
 // so we can grab it out of app settings
 function getSecret (req, payload, done) {
@@ -48,7 +38,7 @@ router.use(
   verifyJwt({
     secret: getSecret
   }),
-  handleAuthError
+  auth.handleError
 )
 
 // These routes are protected
