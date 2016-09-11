@@ -13,10 +13,6 @@ module.exports = {
     connection: process.env.HEROKU_POSTGRESQL,
     migrations: {
       tableName: 'knex_migrations'
-    },
-    pool: {
-      min: 1,
-      max: 10
     }
   }
 
