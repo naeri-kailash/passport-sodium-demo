@@ -48,9 +48,15 @@ router.post('/register',
         // req.login() can be used to automatically log the user in after registering
         users.create(req.body.username, req.body.password)
           .then(() => res.redirect('/login'))
-          .catch(() => next())
+          .catch(err => {
+            console.error(err)
+            next()
+          })
       })
-      .catch(() => next())
+      .catch(err => {
+        console.error(err)
+        next()
+      })
   },
   (req, res) => {
     req.flash('error', "Couldn't add user.")
