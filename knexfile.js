@@ -10,7 +10,7 @@ module.exports = {
 
   production: {
     client: 'postgresql',
-    connection: process.env.HEROKU_POSTGRESQL,
+    connection: process.env.DATABASE_URL,
     migrations: {
       tableName: 'knex_migrations'
     }
