@@ -6,8 +6,8 @@
   "scripts": {
     "knex": "knex",
     "postinstall": "knex migrate:latest",
-    "server": "node-inspector & nodemon --debug",
-    "start": "node index.js"
+    "server": "node-inspector & nodemon server.js --debug",
+    "start": "node server.js"
   },
   "author": "EDA",
   "license": "ISC",
