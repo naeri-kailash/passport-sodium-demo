@@ -4,6 +4,7 @@ const flash = require('connect-flash')
 const path = require('path')
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
+const TwitterStrategy = require('passport-twitter').Strategy
 
 const config = require('./knexfile')[process.env.NODE_ENV || 'development']
 const knex = require('knex')(config)
@@ -19,7 +20,7 @@ const app = express()
 app.engine('hbs', hbs())
 app.set('view engine', 'hbs')
 app.set('views', path.join(__dirname, 'views'))
-
+app.use(express.static('public'))
 app.use(expressSession({
   resave: false,
   saveUninitialized: false,
@@ -34,6 +35,7 @@ app.use('/', indexRoutes)
 app.use('/api/', apiRoutes)
 
 passport.use(new LocalStrategy(auth.verify))
+passport.use(new TwitterStrategy(auth.twitterConfig, auth.twitterVerify))
 passport.serializeUser(users.serialize)
 passport.deserializeUser(users.deserialize)
 
