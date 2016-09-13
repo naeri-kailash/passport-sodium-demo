@@ -5,6 +5,12 @@ This demonstrates a fairly minimal username/password auth, making use of libsodi
 
 ## Install
 
+Create a `.env' file in the root directory and place the following in it
+
+```shell
+SESSION_SECRET=asecret
+```
+
 ```shell
 npm i
 npm start
@@ -16,4 +22,13 @@ Password hashing modules often have a _native_ component: they're written in low
 ## Things to think about
 
 This demo omits plenty of things that a production system would have to care about. For example, how could we better validate the registration form? Right now a user can be created with username ' ' and password ' ': hardly ideal!
+
+
+## Investigations
+
+### Integration tests
+
+Write integration tests over `lib/users.js`
+
+## Feature tests
 

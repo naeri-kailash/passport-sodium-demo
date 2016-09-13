@@ -8,7 +8,7 @@ const router = express.Router()
 module.exports = router
 router.use(bodyParser.urlencoded({ extended: false }))
 
-router.get('/login', (req, res) => {
+router.get('/login', function (req, res) {
   res.render('login', { flash: req.flash('error') })
 })
 
@@ -20,26 +20,26 @@ router.post('/login',
   })
 )
 
-router.get('/logout', (req, res) => {
+router.get('/logout', function (req, res) {
   req.logout()
   res.redirect('/login')
 })
 
 router.get('/',
   ensureLoggedIn(),
-  (req, res) => {
+  function (req, res) {
     res.render('index')
   }
 )
 
-router.get('/register', (req, res) => {
+router.get('/register', function (req, res) {
   res.render('register', { flash: req.flash('error') })
 })
 
 router.post('/register',
-  (req, res, next) => {
+  function (req, res, next) {
     users.exists(req.body.username)
-      .then(exists => {
+      .then(function (exists) {
         if (exists) {
           req.flash('error', 'User already exists, sorry.')
           return res.redirect('/register')
@@ -47,18 +47,18 @@ router.post('/register',
 
         // req.login() can be used to automatically log the user in after registering
         users.create(req.body.username, req.body.password)
-          .then(() => res.redirect('/login'))
-          .catch(err => {
+          .then(function () { return res.redirect('/login')} )
+          .catch(function (err) {
             console.error(err)
             next()
           })
       })
-      .catch(err => {
+      .catch(function (err) {
         console.error(err)
         next()
       })
   },
-  (req, res) => {
+  function (req, res) {
     req.flash('error', "Couldn't add user.")
     res.redirect('/register')
   }

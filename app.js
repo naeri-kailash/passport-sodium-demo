@@ -1,3 +1,4 @@
+require('dotenv').load()
 const express = require('express')
 const hbs = require('express-handlebars')
 const flash = require('connect-flash')
@@ -37,7 +38,4 @@ passport.use(new LocalStrategy(auth.verify))
 passport.serializeUser(users.serialize)
 passport.deserializeUser(users.deserialize)
 
-const PORT = process.env.PORT || 3000
-app.listen(PORT, () => {
-  console.log(`Listening on ${PORT}`)
-})
+module.exports = app

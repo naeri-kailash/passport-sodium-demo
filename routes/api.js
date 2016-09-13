@@ -24,7 +24,7 @@ router.get('/open',
     credentialsRequired: false,
     secret: getSecret
   }),
-  (req, res) => {
+  function (req, res) {
     const json = { message: 'This route is public.' }
     if (req.user) {
       json.user = `Your user ID is: ${req.user.id}`
