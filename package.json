@@ -6,8 +6,8 @@
   "scripts": {
     "knex": "knex",
     "postinstall": "knex migrate:latest",
-    "server": "node-inspector & nodemon --debug",
-    "start": "node index.js"
+    "dev": "nodemon index",
+    "start": "node index"
   },
   "author": "EDA",
   "license": "ISC",
@@ -33,7 +33,6 @@
     "eslint-config-standard": "^6.0.0",
     "eslint-plugin-promise": "^2.0.1",
     "eslint-plugin-standard": "^2.0.0",
-    "node-inspector": "^0.12.8",
     "nodemon": "^1.10.2",
     "sqlite3": "^3.1.4"
   },
