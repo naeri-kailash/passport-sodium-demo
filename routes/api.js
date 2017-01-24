@@ -15,7 +15,7 @@ router.post('/authenticate', auth.issueJwt)
 // express-jwt middleware lets us use a function as the secret,
 // so we can grab it out of app settings
 function getSecret (req, payload, done) {
-  done(null, req.app.get('AUTH_SECRET'))
+  done(null, process.env.JWT_SECRET)
 }
 
 // This route will set the req.user object if it exists, but is still public

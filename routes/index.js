@@ -5,7 +5,6 @@ const passport = require('passport')
 const users = require('../lib/users')
 
 const router = express.Router()
-module.exports = router
 router.use(bodyParser.urlencoded({ extended: false }))
 
 router.get('/login', (req, res) => {
@@ -37,23 +36,28 @@ router.get('/register', (req, res) => {
 })
 
 router.post('/register',
-  (req, res, next) => {
-    users.exists(req.body.username)
-      .then(exists => {
-        if (exists) {
-          req.flash('error', 'User already exists, sorry.')
-          return res.redirect('/register')
-        }
-
-        // req.login() can be used to automatically log the user in after registering
-        users.create(req.body.username, req.body.password)
-          .then(() => res.redirect('/login'))
-          .catch(() => next())
-      })
-      .catch(() => next())
-  },
-  (req, res) => {
-    req.flash('error', "Couldn't add user.")
-    res.redirect('/register')
-  }
+  register,
+  registerFail
 )
+
+function register (req, res, next) {
+  users.exists(req.body.username)
+    .then(exists => {
+      if (exists) {
+        req.flash('error', 'User already exists, sorry.')
+        return res.redirect('/register')
+      }
+
+      // req.login() can be used to automatically log the user in after registering
+      users.create(req.body.username, req.body.password)
+        .then(() => res.redirect('/login'))
+    })
+    .catch(() => next())
+}
+
+function registerFail (req, res) {
+  req.flash('error', "Couldn't add user.")
+  res.redirect('/register')
+}
+
+module.exports = router
