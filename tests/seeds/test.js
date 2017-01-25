@@ -7,10 +7,9 @@ const makeHash = password => sodium.crypto_pwhash_str(
   sodium.crypto_pwhash_MEMLIMIT_INTERACTIVE
 )
 
-exports.seed = (knex, Promise) => {
-  return knex('users').del()
-    .then(() => Promise.all([
-      knex('users').insert({id: 1, username: 'aardvark', hash: makeHash('aardvark')}),
-      knex('users').insert({id: 2, username: 'capybara', hash: makeHash('capybara')})
-    ]))
-}
+exports.seed = (knex, Promise) => knex('users')
+  .del()
+  .then(() => Promise.all([
+    knex('users').insert({id: 1, username: 'aardvark', hash: makeHash('aardvark')}),
+    knex('users').insert({id: 2, username: 'capybara', hash: makeHash('capybara')})
+  ]))

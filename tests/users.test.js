@@ -24,3 +24,4 @@ test('exists is falsy for gnu', t => {
     .exists('gnu', t.context.db)
     .then(actual => t.falsy(actual))
 })
+
