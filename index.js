@@ -1,18 +1,6 @@
 require('dotenv').config()
 
-const fs = require('fs')
-const http = require('http')
-const https = require('https')
+const server = require('./server')
 
-const app = require('./server')
-
-const options = {
-  key: fs.readFileSync('key.pem'),
-  cert: fs.readFileSync('cert.pem')
-}
-
-const server = http.createServer(app)
-const secureServer = https.createServer(options, app)
-
-server.listen(8000)
-secureServer.listen(8443)
+server.http.listen(8000)
+server.https.listen(8443)
