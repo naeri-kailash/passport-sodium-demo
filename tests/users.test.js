@@ -25,3 +25,14 @@ test('exists is falsy for gnu', t => {
     .then(actual => t.falsy(actual))
 })
 
+test('getById obtains correct user', t => {
+  return users
+    .getById(2, t.context.db)
+    .then(([ user ]) => t.is(user.username, 'capybara'))
+})
+
+test('getByName obtains correct user', t => {
+  return users
+    .getByName('aardvark', t.context.db)
+    .then(([ user ]) => t.is(user.id, 1))
+})
