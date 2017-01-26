@@ -1,6 +1,6 @@
 # Express server with Passport local auth
 
-This demonstrates a fairly minimal username/password auth, making use of libsodium/Argon2i password hashing. There's also a tiny API to show how JWT might be used to secure it. Finally, HTTPS is enforced.
+This demonstrates a fairly minimal username/password auth, making use of libsodium/Argon2i password hashing. There's also a tiny API to show how JWT might be used to secure it.
 
 
 ## Install
@@ -16,8 +16,6 @@ The session and JWT secrets are loaded from environment variables. Create an `.e
 SESSION_SECRET=12345asdflksdjfj
 JWT_SECRET=asldfkjsdlfk
 ```
-
-Create a `cert.pem` and `key.pem` file in the root directory. Use [this SO post](http://stackoverflow.com/a/12907165/122643) if you're not sure how.
 
 Password hashing modules often have a _native_ component: they're written in lower-level languages like C or C++ with a JavaScript _wrapper_. This means they can be trickier to install on some platforms. There are some instructions for how to obtain the necessary tools to build native modules [here](https://github.com/dev-academy-programme/orientation/tree/master/3-installation/node.md).
 

@@ -3,23 +3,8 @@ const request = require('supertest')
 
 const app = require('../server')
 
-test.before(t => {
-  // Ignore the fact that the cert is unsigned
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-})
-
-test.cb('Redirects requests without SSL', t => {
-  request(app.http)
-    .get('/api/open')
-    .expect(301)
-    .end((err, res) => {
-      t.ifError(err)
-      t.end()
-    })
-})
-
 test.cb('Authenticate complains about no credentials', t => {
-  request(app.https)
+  request(app)
     .post('/api/authenticate')
     .send({})
     .expect(403)
@@ -31,7 +16,7 @@ test.cb('Authenticate complains about no credentials', t => {
 })
 
 test.cb('/api/open responds without token', t => {
-  request(app.https)
+  request(app)
     .get('/api/open')
     .end((err, res) => {
       t.ifError(err)
@@ -41,7 +26,7 @@ test.cb('/api/open responds without token', t => {
 })
 
 test.cb("/api/closed 403's without token", t => {
-  request(app.https)
+  request(app)
     .get('/api/closed')
     .expect(403)
     .end((err, res) => {

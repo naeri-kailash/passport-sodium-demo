@@ -1,6 +1,7 @@
 require('dotenv').config()
 
-const server = require('./server')
+const app = require('./server')
 
-server.http.listen(8000)
-server.https.listen(8443)
+app.listen(3000, () => {
+  console.log('Listening on port 3000')
+})
