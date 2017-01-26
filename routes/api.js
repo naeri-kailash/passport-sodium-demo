@@ -5,7 +5,6 @@ const verifyJwt = require('express-jwt')
 const auth = require('../lib/auth.js')
 
 const router = express.Router()
-module.exports = router
 router.use(bodyParser.json())
 
 // This is the only API route that uses local strategy, to check if we can
@@ -45,3 +44,5 @@ router.use(
 router.get('/closed', (req, res) => {
   res.json({ message: `Yup, you seem to be user ${req.user.id}.` })
 })
+
+module.exports = router
