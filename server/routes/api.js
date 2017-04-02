@@ -18,13 +18,13 @@ function getSecret (req, payload, done) {
 }
 
 // This route will set the req.user object if it exists, but is still public
-router.get('/open',
+router.get('/quote',
   verifyJwt({
     credentialsRequired: false,
     secret: getSecret
   }),
   (req, res) => {
-    const json = { message: 'This route is public.' }
+    const json = { message: 'This is a quote.' }
     if (req.user) {
       json.user = `Your user ID is: ${req.user.id}`
     }
@@ -41,8 +41,8 @@ router.use(
 )
 
 // These routes are protected
-router.get('/closed', (req, res) => {
-  res.json({ message: `Yup, you seem to be user ${req.user.id}.` })
+router.get('/secret', (req, res) => {
+  res.json({ message: `Yup, you seem to be user ${req.user.id}. This is a secret quote.` })
 })
 
 module.exports = router

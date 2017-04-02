@@ -22,8 +22,8 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(session)
 app.use(flash())
 app.use(express.static('public'))
-// uncomment this line when doing exercise 2
-// app.use(express.static('static'))
+// include the next line for client side, comment for server side
+app.use(express.static('static'))
 app.use(passport.initialize())
 app.use(passport.session())
 
