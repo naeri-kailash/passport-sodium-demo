@@ -38,7 +38,6 @@ export default store => next => action => {
   if (typeof callAPI === 'undefined') {
     return next(action)
   }
-  console.log(action)
 
   let { endpoint, types, authenticated } = callAPI
 
