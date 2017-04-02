@@ -47,7 +47,9 @@
     "react-dom": "^15.3.0",
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
+    "redux-thunk": "^2.2.0",
     "sqlite3": "^3.1.8",
+    "superagent": "^3.5.2",
     "supertest": "^2.0.1",
     "webpack": "^1.13.1"
   },
