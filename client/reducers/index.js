@@ -1,7 +1,13 @@
 import {combineReducers} from 'redux'
 
-import words from './words'
+import auth from './auth'
+import quotes from './quotes'
 
-export default combineReducers({
-  words
+// We combine the reducers here so that they
+// can be left split apart above
+const quotesApp = combineReducers({
+  auth,
+  quotes
 })
+
+export default quotesApp
