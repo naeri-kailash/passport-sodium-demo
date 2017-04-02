@@ -4,5 +4,9 @@
     "plugins": [
         "standard",
         "promise"
-    ]
+    ],
+    "globals": {
+      "fetch": true,
+      "localStorage": true
+    }
 }
