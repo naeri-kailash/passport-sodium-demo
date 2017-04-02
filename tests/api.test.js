@@ -1,7 +1,7 @@
 const test = require('ava')
 const request = require('supertest')
 
-const app = require('../server')
+const app = require('../server/server')
 
 test.cb('Authenticate complains about no credentials', t => {
   request(app)

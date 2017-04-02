@@ -34,4 +34,3 @@ passport.serializeUser(users.serialize)
 passport.deserializeUser(users.deserialize)
 
 module.exports = app
-

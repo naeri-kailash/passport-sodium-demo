@@ -1,7 +1,7 @@
 const sodium = require('sodium').api
 const test = require('ava')
 
-const crypto = require('../lib/crypto')
+const crypto = require('../server/lib/crypto')
 
 test('getHash returns verifiable hash in buffer', t => {
   const password = Buffer.from('password', 'utf8')

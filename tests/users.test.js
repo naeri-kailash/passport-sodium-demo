@@ -2,7 +2,7 @@ const test = require('ava')
 const knex = require('knex')
 
 const config = require('../knexfile').test
-const users = require('../lib/users')
+const users = require('../server/lib/users')
 
 test.beforeEach(t => {
   t.context.db = knex(config)

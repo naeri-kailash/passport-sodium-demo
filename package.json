@@ -7,7 +7,7 @@
     "dev": "nodemon index",
     "knex": "knex",
     "postinstall": "knex migrate:latest",
-    "start": "node index",
+    "start": "node server/index",
     "test": "ava",
     "test:watch": "ava --watch"
   },
