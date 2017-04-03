@@ -1,3 +1,4 @@
+
 const express = require('express')
 const flash = require('connect-flash')
 const hbs = require('express-handlebars')
@@ -34,4 +35,3 @@ passport.serializeUser(users.serialize)
 passport.deserializeUser(users.deserialize)
 
 module.exports = app
-
